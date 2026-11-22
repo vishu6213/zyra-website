@@ -1,0 +1,211 @@
+/* ============================================================
+   ZYRA — brand + layout overrides
+   Keeps the original motion system untouched; only removes
+   external/product UI and restyles the Zyra wordmark details.
+   ============================================================ */
+
+/* Cookie consent (removed by request) */
+#cookie-consent-container,
+.fdcm--container,
+.fdcm--popup,
+.fdcm--overlay {
+  display: none !important;
+}
+
+/* Header: remove the info/nav group (info “i”, Dev Guides, Skill Hub,
+   Start a Project). The katana mark and the scroll progress remain,
+   and the wordmark appears on scroll exactly as it did before. */
+/* Header navigation */
+/* header nav.info {
+  display: none !important;
+} */
+
+/* Hero: remove the Skill Hub video card. */
+a.skill-hub-link {
+  display: none !important;
+}
+
+/* Floating red-dot badge. */
+.reddot {
+  display: none !important;
+}
+
+/* Footer: remove Skill Hub / npm / Discord row and the external
+   “Learn how” link. */
+footer nav,
+footer .own-modules,
+footer .fidoru {
+  display: none !important;
+}
+
+/* Belt-and-braces: hide any leftover links to the old product routes
+   or external StringTune destinations. */
+a[href="/skill-hub"],
+a[href="/dev-guides"],
+a[href*="tympanus.net"],
+a[href*="fiddle.digital"],
+a[href*="string-tune-docs"],
+a[href*="tune-demo"],
+a[href*="discord.gg"],
+a[href*="npmjs.com/package/@fiddle-digital"] {
+  display: none !important;
+}
+
+/* The footer’s little Japanese maker mark, now Zyra ザイラ. */
+footer .-w .zyra-jp {
+  align-self: center;
+  color: var(--c-grey);
+  font-family: KHTeka, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: var(--h5);
+  grid-column: 1 / -1 !important;
+  grid-row: 5 / 6 !important;
+  justify-self: center;
+  letter-spacing: 0.38em;
+  line-height: 1;
+  margin-top: var(--h1);
+  text-indent: 0.38em;
+  transform: translateZ(0);
+  white-space: nowrap;
+}
+
+/* The original footer wordmark’s small superscript “c” mark is tied
+   to the old seven-letter name; retire it for the Zyra mark. */
+footer .-w .the-name::after {
+  display: none !important;
+}
+
+/* Hero wordmark: the original uses a baked-in “StringTune” SVG mask.
+   Clip the same animated grey/glow background to the live Zyra text
+   instead, so the scroll animation and transitions remain untouched. */
+.c-welcome .-w .the-name > span {
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+/* Retire the old wordmark’s superscript © in the hero. */
+.c-welcome .-w .the-name::after {
+  display: none !important;
+}
+
+.c-welcome .the-name span:last-child {
+  margin-right: 0;
+}
+
+@media (max-width: 1023px) {
+  /* Four letters read better as one strong line than as two short
+     stacked lines. Keep the same clip/glow animation. */
+  .c-welcome .-w .the-name > span {
+    flex-direction: row !important;
+    font-size: 150px !important;
+    line-height: 0.88 !important;
+    translate: 0 -2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  footer .-w .zyra-jp {
+    font-size: var(--h4);
+    margin-top: var(--h2);
+  }
+}
+
+/* No layout jump while fonts settle. */
+html {
+  scrollbar-color: var(--c-grey-dark) var(--c-black);
+}
+
+/* ============================================================
+   Zyra showcase — Play · Create · Watch Together
+   The old feature masonry is repurposed as one full-width piece
+   of artwork. Its cards remain in the SSR markup so Vue hydration
+   stays intact; they are hidden, and the image is painted by the
+   section’s ::before layer. The near-white edge of the JPEG is
+   blended into the light section background so the panel sits
+   seamlessly on the page.
+
+   Scroll progress is written to --zyra-p and data-zyra-pct on the
+   section by /zyra-showcase.js, which drives the focus effect.
+   ============================================================ */
+
+.c-masonry.-light {
+  --zyra-p: 0;
+  --zyra-meter: 2.8rem;
+  background-color: var(--c-grey);
+  margin-top: var(--h1);
+  overflow: hidden;
+  padding-top: var(--zyra-meter);
+  position: relative;
+  z-index: 2;
+}
+
+/* Hide the original masonry cards, keep the component untouched. */
+.c-masonry.-light > .-w {
+  display: none !important;
+}
+
+/* The artwork. Starts out of focus, sharpens with scroll. */
+.c-masonry.-light::before {
+  aspect-ratio: 1708 / 921;
+  background-image: url("/images/home/zyra-trio.jpg");
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  content: "";
+  display: block;
+  filter: blur(calc((1 - var(--zyra-p)) * clamp(10px, 1.5vw, 22px)))
+    saturate(calc(0.86 + var(--zyra-p) * 0.14));
+  mix-blend-mode: darken;
+  transform: scale(calc(1 + (1 - var(--zyra-p)) * 0.045));
+  transform-origin: 50% 50%;
+  width: 100%;
+  will-change: filter, transform;
+}
+
+/* Focus meter: compact percentage caption above the artwork. */
+.c-masonry.-light::after {
+  background-image: linear-gradient(
+    90deg,
+    var(--c-red) 0 calc(var(--zyra-p) * 100%),
+    rgba(var(--c-black-rgb), 0.2) calc(var(--zyra-p) * 100%) 100%
+  );
+  background-origin: content-box;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
+  box-sizing: border-box;
+  color: var(--c-black);
+  content: "Focus — " attr(data-zyra-pct, "0") "%";
+  font-family: var(--font-mono);
+  font-size: var(--mm);
+  height: var(--zyra-meter);
+  letter-spacing: 0.08em;
+  line-height: 1.15;
+  opacity: 0.8;
+  padding-bottom: 0.9rem;
+  padding-top: 0.55rem;
+  pointer-events: none;
+  position: absolute;
+  right: var(--g-margin);
+  text-align: right;
+  text-transform: uppercase;
+  top: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c-masonry.-light::before {
+    filter: none;
+    transform: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .c-masonry.-light::before {
+    aspect-ratio: 5 / 4;
+    background-position: 50% 32%;
+    background-size: cover;
+  }
+}

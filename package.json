@@ -1,0 +1,13 @@
+{
+  "name": "zyra-website",
+  "private": true,
+  "version": "1.0.2",
+  "description": "Official cinematic landing page for ZYRA — Next-Gen AI Desktop Cyber Companion.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
