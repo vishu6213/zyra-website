@@ -209,3 +209,16 @@ html {
     background-size: cover;
   }
 }
+
+/* Remove the katana visuals called out in the techniques and footer. */
+.c-techniques [string-id="techniques-sword"],
+.c-techniques .sword-place .sword,
+.c-techniques > .-w .sword-wrap,
+footer .-w .kw {
+  display: none !important;
+}
+
+/* Replace the footer polygon artwork with the supplied image. */
+footer .-w .polygon {
+  background-image: url("/images/general/footer-polygon-replacement.png") !important;
+}
